@@ -1,0 +1,15 @@
+{
+    "name": "codeasart/parser",
+    "type": "project",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Vojtech Sedlacek",
+            "email": "codeasart@gmail.com"
+        }
+    ],
+    "require": {
+        "silex/silex": "~2.0",
+        "doctrine/dbal": "~2.5"
+    }
+}

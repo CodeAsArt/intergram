@@ -1,0 +1,11 @@
+# Composer
+composer.lock
+
+# Vendors
+vendor/*
+
+# Webserver Configuration
+.htaccess
+
+# IDEs
+/.idea/*
