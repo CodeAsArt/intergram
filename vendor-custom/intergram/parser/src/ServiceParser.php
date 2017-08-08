@@ -69,45 +69,43 @@ class ServiceParser
             $row = ltrim($row, " \t\n\r");
 
             $records = explode(self::DELIMITER_ROW, $row);
-            $items = [];
             foreach ($records as $index => $record) {
-                $rowType = $record[0];
-                switch ($this->state) {
-                    case self::STATE_INIT:
-                        $this->checkStateInit($rowType);
-                        break;
-
-                    case self::ROW_TYPE_Y_PROT_DATA:
-                        $this->checkStateRowTypeProtDataY($rowType);
-                        break;
-
-                    case self::ROW_TYPE_A_PORAD_TV:
-                        $this->checkStateRowTypePoradTvA($rowType);
-                        break;
-
-                    case self::ROW_TYPE_B_SNIMEK_TV:
-                    case self::ROW_TYPE_L_PODIL_TV:
-                        $this->checkStateRowTypeSnimekTvBPodilTvL($rowType);
-                        break;
-
-                    case self::ROW_TYPE_D_KSNIMEK_TV:
-                    case self::ROW_TYPE_E_KPODIL:
-                        $this->checkStateRowTypeKsnimekTvDKpodilTvE($rowType);
-                        break;
-
-                    case self::STATE_END:
-                        break;
-
-                }
-
-                if (strlen($record) > 0) {
-                    $items[$index] = explode(self::DELIMITER_ITEM, $record);
-                }
+                $this->stateMachine($record);
             }
         }
 
         if ($this->app['debug']) {
             die('END');
+        }
+    }
+
+    private function stateMachine($record) {
+        $rowType = $record[0];
+        switch ($this->state) {
+            case self::STATE_INIT:
+                $this->checkStateInit($rowType);
+                break;
+
+            case self::ROW_TYPE_Y_PROT_DATA:
+                $this->checkStateRowTypeProtDataY($rowType);
+                break;
+
+            case self::ROW_TYPE_A_PORAD_TV:
+                $this->checkStateRowTypePoradTvA($rowType);
+                break;
+
+            case self::ROW_TYPE_B_SNIMEK_TV:
+            case self::ROW_TYPE_L_PODIL_TV:
+                $this->checkStateRowTypeSnimekTvBPodilTvL($rowType);
+                break;
+
+            case self::ROW_TYPE_D_KSNIMEK_TV:
+            case self::ROW_TYPE_E_KPODIL:
+                $this->checkStateRowTypeKsnimekTvDKpodilTvE($rowType);
+                break;
+
+            case self::STATE_END:
+                break;
         }
     }
 
