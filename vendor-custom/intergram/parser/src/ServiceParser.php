@@ -104,11 +104,10 @@ class ServiceParser
                     $items[$index] = explode(self::DELIMITER_ITEM, $record);
                 }
             }
+        }
 
-            if ($this->app['debug']) {
-                $this->log(AbstractLogger::SEVERITY_INFORMATION, 'Die was called you are under debug mode.', ['filename' => $filename]);
-                die();
-            }
+        if ($this->app['debug']) {
+            die('END');
         }
     }
 
@@ -172,8 +171,8 @@ class ServiceParser
                 $this->state = self::ROW_TYPE_D_KSNIMEK_TV;
                 break;
 
-            case self::ROW_TYPE_Y_PROT_DATA:
-                $this->state = self::ROW_TYPE_Y_PROT_DATA;
+            case self::ROW_TYPE_A_PORAD_TV:
+                $this->state = self::ROW_TYPE_A_PORAD_TV;
                 break;
 
             default:
@@ -203,8 +202,8 @@ class ServiceParser
                 $this->state = self::ROW_TYPE_D_KSNIMEK_TV;
                 break;
 
-            case self::ROW_TYPE_Y_PROT_DATA:
-                $this->state = self::ROW_TYPE_Y_PROT_DATA;
+            case self::ROW_TYPE_A_PORAD_TV:
+                $this->state = self::ROW_TYPE_A_PORAD_TV;
                 break;
 
             default:
@@ -234,8 +233,8 @@ class ServiceParser
                 $this->state = self::ROW_TYPE_D_KSNIMEK_TV;
                 break;
 
-            case self::ROW_TYPE_Y_PROT_DATA:
-                $this->state = self::ROW_TYPE_Y_PROT_DATA;
+            case self::ROW_TYPE_A_PORAD_TV:
+                $this->state = self::ROW_TYPE_A_PORAD_TV;
                 break;
 
             default:
