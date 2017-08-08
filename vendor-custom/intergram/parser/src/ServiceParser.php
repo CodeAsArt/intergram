@@ -16,26 +16,14 @@ class ServiceParser
     const DELIMITER_ROW = "\x3B"; // ;
     const DELIMITER_ITEM = "\x2C"; // ,
 
-    const STATE_INIT = 7777;
-    const STATE_PROT_DATA = 1;
-    const STATE_PORAD_TV = 11;
-    const STATE_SNIMEK_TV = 111;
-    const STATE_PODIL_TV = 1111;
-    const STATE_KSNIMEK_TV = 112;
-    const STATE_KPODIL = 1121;
-    const STATE_PRODEJ_TV = 12;
-    const STATE_PSNIMEK_TV = 121;
-    const STATE_PPODIL_TV = 1211;
-    const STATE_R_SPOT = 13;
-    const STATE_RKSNIMEK_TV = 131;
-    const STATE_RKPODIL = 1311;
-    const STATE_END = 9999;
+    const STATE_INIT = 'init';
+    const STATE_END = 'end';
 
     const ROW_TYPE_Y_PROT_DATA = 'y';
     const ROW_TYPE_A_PORAD_TV = 'a';
     const ROW_TYPE_B_SNIMEK_TV = 'b';
-    const ROW_TYPE_L_PODIL = 'l';
-    const ROW_TYPE_D_KSNIMEK = 'd';
+    const ROW_TYPE_L_PODIL_TV = 'l';
+    const ROW_TYPE_D_KSNIMEK_TV = 'd';
     const ROW_TYPE_E_KPODIL = 'e';
 
     const SHAREHOLDER_TYPE_INTERPRETER = 'I';
@@ -82,20 +70,16 @@ class ServiceParser
                 switch ($this->state) {
                     case self::STATE_INIT:
                         if ($rowType == self::ROW_TYPE_Y_PROT_DATA) {
-                            $this->state = self::STATE_PROT_DATA;
+                            $this->state = self::ROW_TYPE_Y_PROT_DATA;
                         } else {
                             throw new \Exception("Unexpected row type ($rowType).");
                         }
                         break;
 
-                    case self::STATE_PROT_DATA:
+                    case self::ROW_TYPE_Y_PROT_DATA:
                         switch ($rowType) {
                             case self::ROW_TYPE_A_PORAD_TV:
-                                $this->state = self::STATE_PORAD_TV;
-                                break;
-
-                            case self::ROW_TYPE_A_PORAD_TV:
-                                $this->state = self::STATE_PORAD_TV;
+                                $this->state = self::ROW_TYPE_A_PORAD_TV;
                                 break;
 
                             default:
@@ -104,37 +88,19 @@ class ServiceParser
                         }
                         break;
 
-                    case self::STATE_PORAD_TV:
+                    case self::ROW_TYPE_A_PORAD_TV:
                         break;
 
-                    case self::STATE_SNIMEK_TV:
+                    case self::ROW_TYPE_B_SNIMEK_TV:
                         break;
 
-                    case self::STATE_PODIL_TV:
+                    case self::ROW_TYPE_L_PODIL_TV:
                         break;
 
-                    case self::STATE_KSNIMEK_TV:
+                    case self::ROW_TYPE_D_KSNIMEK_TV:
                         break;
 
-                    case self::STATE_KPODIL:
-                        break;
-
-                    case self::STATE_PRODEJ_TV:
-                        break;
-
-                    case self::STATE_PSNIMEK_TV:
-                        break;
-
-                    case self::STATE_PPODIL_TV:
-                        break;
-
-                    case self::STATE_R_SPOT:
-                        break;
-
-                    case self::STATE_RKSNIMEK_TV:
-                        break;
-
-                    case self::STATE_RKPODIL:
+                    case self::ROW_TYPE_E_KPODIL:
                         break;
 
                     case self::STATE_END:
