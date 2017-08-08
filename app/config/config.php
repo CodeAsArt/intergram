@@ -27,7 +27,7 @@ $app->register(new ServiceParserProvider());
 $app->register(new ServiceLoggerProvider(), [
     'intergram.logger.type' => ServiceLoggerProvider::LOGGER_BASIC,
     'intergram.logger.conf' => [
-        'inlinePrint' => true,
+        'inlinePrint' => false,
         'elementsOrder' => [],
     ]
 ]);
