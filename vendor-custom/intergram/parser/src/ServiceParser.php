@@ -25,6 +25,11 @@ class ServiceParser
     const ROW_TYPE_L_PODIL_TV = 'l';
     const ROW_TYPE_D_KSNIMEK_TV = 'd';
     const ROW_TYPE_E_KPODIL = 'e';
+    // Note: Currently unsupported row types (due to brief)
+    const ROW_TYPE_Q_KPRODEJ_TV = 'e';
+    const ROW_TYPE_R_PSNIMEK_TV = 'r';
+    const ROW_TYPE_S_PPODIL_TV = 's';
+    const ROW_TYPE_W_R_SPOT = 'w';
 
     const SHAREHOLDER_TYPE_INTERPRETER = 'I';
     const SHAREHOLDER_TYPE_AUTHOR = 'A';
@@ -116,10 +121,19 @@ class ServiceParser
      * @throws \Exception
      */
     private function checkStateInit($rowType) {
-        if ($rowType == self::ROW_TYPE_Y_PROT_DATA) {
-            $this->state = self::ROW_TYPE_Y_PROT_DATA;
-        } else {
-            throw new \Exception("Unexpected row type ($rowType).");
+        switch ($rowType) {
+            case self::ROW_TYPE_Y_PROT_DATA:
+                $this->state = self::ROW_TYPE_Y_PROT_DATA;
+                break;
+
+            case self::ROW_TYPE_Q_KPRODEJ_TV:
+            case self::ROW_TYPE_W_R_SPOT:
+                throw new \Exception("Currently unsupported row type ($rowType).");
+                break;
+
+            default:
+                throw new \Exception("Unexpected row type ($rowType).");
+                break;
         }
     }
 
@@ -134,6 +148,11 @@ class ServiceParser
         switch ($rowType) {
             case self::ROW_TYPE_A_PORAD_TV:
                 $this->state = self::ROW_TYPE_A_PORAD_TV;
+                break;
+
+            case self::ROW_TYPE_Q_KPRODEJ_TV:
+            case self::ROW_TYPE_W_R_SPOT:
+                throw new \Exception("Currently unsupported row type ($rowType).");
                 break;
 
             default:
