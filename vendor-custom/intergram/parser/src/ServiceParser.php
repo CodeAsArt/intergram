@@ -69,23 +69,11 @@ class ServiceParser
                 $rowType = $record[0];
                 switch ($this->state) {
                     case self::STATE_INIT:
-                        if ($rowType == self::ROW_TYPE_Y_PROT_DATA) {
-                            $this->state = self::ROW_TYPE_Y_PROT_DATA;
-                        } else {
-                            throw new \Exception("Unexpected row type ($rowType).");
-                        }
+                        $this->checkStateInit($rowType);
                         break;
 
                     case self::ROW_TYPE_Y_PROT_DATA:
-                        switch ($rowType) {
-                            case self::ROW_TYPE_A_PORAD_TV:
-                                $this->state = self::ROW_TYPE_A_PORAD_TV;
-                                break;
-
-                            default:
-                                throw new \Exception("Unexpected row type ($rowType).");
-                                break;
-                        }
+                        $this->checkStateRowTypeProtDataY($rowType);
                         break;
 
                     case self::ROW_TYPE_A_PORAD_TV:
@@ -117,6 +105,40 @@ class ServiceParser
                 $this->log(AbstractLogger::SEVERITY_INFORMATION, 'Die was called you are under debug mode.', ['filename' => $filename]);
                 die();
             }
+        }
+    }
+
+    /**
+     * Check Init state
+     *
+     * @param $rowType
+     *
+     * @throws \Exception
+     */
+    private function checkStateInit($rowType) {
+        if ($rowType == self::ROW_TYPE_Y_PROT_DATA) {
+            $this->state = self::ROW_TYPE_Y_PROT_DATA;
+        } else {
+            throw new \Exception("Unexpected row type ($rowType).");
+        }
+    }
+
+    /**
+     * Check PROT_DATA state (type y)
+     *
+     * @param $rowType
+     *
+     * @throws \Exception
+     */
+    private function checkStateRowTypeProtDataY($rowType) {
+        switch ($rowType) {
+            case self::ROW_TYPE_A_PORAD_TV:
+                $this->state = self::ROW_TYPE_A_PORAD_TV;
+                break;
+
+            default:
+                throw new \Exception("Unexpected row type ($rowType).");
+                break;
         }
     }
 
