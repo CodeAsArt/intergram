@@ -14,7 +14,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Intergram\\Parser\\": "vendor-custom/intergram/parser/src/"
+            "Intergram\\Parser\\": "vendor-custom/intergram/parser/src/",
+            "Intergram\\Logger\\": "vendor-custom/intergram/logger/src/"
         }
     }
 }
