@@ -26,7 +26,7 @@ class ServiceParser
     const ROW_TYPE_D_KSNIMEK_TV = 'd';
     const ROW_TYPE_E_KPODIL = 'e';
     // Note: Currently unsupported row types (due to brief)
-    const ROW_TYPE_Q_KPRODEJ_TV = 'e';
+    const ROW_TYPE_Q_PRODEJ_TV = 'e';
     const ROW_TYPE_R_PSNIMEK_TV = 'r';
     const ROW_TYPE_S_PPODIL_TV = 's';
     const ROW_TYPE_W_R_SPOT = 'w';
@@ -82,18 +82,17 @@ class ServiceParser
                         break;
 
                     case self::ROW_TYPE_A_PORAD_TV:
+                        $this->checkStateRowTypePoradTvA($rowType);
                         break;
 
                     case self::ROW_TYPE_B_SNIMEK_TV:
-                        break;
-
                     case self::ROW_TYPE_L_PODIL_TV:
+                        $this->checkStateRowTypeSnimekTvBPodilTvL($rowType);
                         break;
 
                     case self::ROW_TYPE_D_KSNIMEK_TV:
-                        break;
-
                     case self::ROW_TYPE_E_KPODIL:
+                        $this->checkStateRowTypeKsnimekTvDKpodilTvE($rowType);
                         break;
 
                     case self::STATE_END:
@@ -126,11 +125,6 @@ class ServiceParser
                 $this->state = self::ROW_TYPE_Y_PROT_DATA;
                 break;
 
-            case self::ROW_TYPE_Q_KPRODEJ_TV:
-            case self::ROW_TYPE_W_R_SPOT:
-                throw new \Exception("Currently unsupported row type ($rowType).");
-                break;
-
             default:
                 throw new \Exception("Unexpected row type ($rowType).");
                 break;
@@ -150,9 +144,98 @@ class ServiceParser
                 $this->state = self::ROW_TYPE_A_PORAD_TV;
                 break;
 
-            case self::ROW_TYPE_Q_KPRODEJ_TV:
+            case self::ROW_TYPE_Q_PRODEJ_TV:
             case self::ROW_TYPE_W_R_SPOT:
                 throw new \Exception("Currently unsupported row type ($rowType).");
+                break;
+
+            default:
+                throw new \Exception("Unexpected row type ($rowType).");
+                break;
+        }
+    }
+
+    /**
+     * Check PORAD_TV state (type a)
+     *
+     * @param $rowType
+     *
+     * @throws \Exception
+     */
+    private function checkStateRowTypePoradTvA($rowType) {
+        switch ($rowType) {
+            case self::ROW_TYPE_B_SNIMEK_TV:
+                $this->state = self::ROW_TYPE_B_SNIMEK_TV;
+                break;
+
+            case self::ROW_TYPE_D_KSNIMEK_TV:
+                $this->state = self::ROW_TYPE_D_KSNIMEK_TV;
+                break;
+
+            case self::ROW_TYPE_Y_PROT_DATA:
+                $this->state = self::ROW_TYPE_Y_PROT_DATA;
+                break;
+
+            default:
+                throw new \Exception("Unexpected row type ($rowType).");
+                break;
+        }
+    }
+
+    /**
+     * Check SNIMEK_TV and PODIL_TV state (type b and l)
+     *
+     * @param $rowType
+     *
+     * @throws \Exception
+     */
+    private function checkStateRowTypeSnimekTvBPodilTvL($rowType) {
+        switch ($rowType) {
+            case self::ROW_TYPE_L_PODIL_TV:
+                $this->state = self::ROW_TYPE_L_PODIL_TV;
+                break;
+
+            case self::ROW_TYPE_B_SNIMEK_TV:
+                $this->state = self::ROW_TYPE_B_SNIMEK_TV;
+                break;
+
+            case self::ROW_TYPE_D_KSNIMEK_TV:
+                $this->state = self::ROW_TYPE_D_KSNIMEK_TV;
+                break;
+
+            case self::ROW_TYPE_Y_PROT_DATA:
+                $this->state = self::ROW_TYPE_Y_PROT_DATA;
+                break;
+
+            default:
+                throw new \Exception("Unexpected row type ($rowType).");
+                break;
+        }
+    }
+
+    /**
+     * Check KSNIMEK_TV and KPODIL_TV state (type d and e)
+     *
+     * @param $rowType
+     *
+     * @throws \Exception
+     */
+    private function checkStateRowTypeKsnimekTvDKpodilTvE($rowType) {
+        switch ($rowType) {
+            case self::ROW_TYPE_E_KPODIL:
+                $this->state = self::ROW_TYPE_E_KPODIL;
+                break;
+
+            case self::ROW_TYPE_B_SNIMEK_TV:
+                $this->state = self::ROW_TYPE_B_SNIMEK_TV;
+                break;
+
+            case self::ROW_TYPE_D_KSNIMEK_TV:
+                $this->state = self::ROW_TYPE_D_KSNIMEK_TV;
+                break;
+
+            case self::ROW_TYPE_Y_PROT_DATA:
+                $this->state = self::ROW_TYPE_Y_PROT_DATA;
                 break;
 
             default:
