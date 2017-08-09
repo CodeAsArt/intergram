@@ -2,6 +2,7 @@
 
 use Intergram\Parser\ServiceParserProvider;
 use Intergram\Logger\ServiceLoggerProvider;
+use Intergram\Validator\ServiceValidatorProvider;
 
 ini_set('display_errors', 1);
 
@@ -30,4 +31,9 @@ $app->register(new ServiceLoggerProvider(), [
         'inlinePrint' => false,
         'elementsOrder' => [],
     ]
+]);
+
+/* Register Validator */
+$app->register(new ServiceValidatorProvider(), [
+    'intergram.validator.conf_path' => __DIR__.'/validator/',
 ]);

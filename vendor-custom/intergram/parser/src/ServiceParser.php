@@ -15,6 +15,7 @@ class ServiceParser
 {
     const DELIMITER_ROW = "\x3B"; // ;
     const DELIMITER_ITEM = "\x2C"; // ,
+    const ENCLOSURE_CHAR = "\x22"; // "
 
     const STATE_INIT = 'init';
     const STATE_END = 'end';
@@ -33,9 +34,6 @@ class ServiceParser
 
     const SHAREHOLDER_TYPE_INTERPRETER = 'I';
     const SHAREHOLDER_TYPE_AUTHOR = 'A';
-
-    const DATA_TYPE_ARRAY_EXP = '/^([\x20\x21\x23-\xFF]*)$/g';
-    const DATA_TYPE_INT_EXP = '/^([0-9]*)$/g';
 
     private $state = self::STATE_INIT;
 
@@ -73,40 +71,39 @@ class ServiceParser
                 $this->stateMachine($record);
             }
         }
-
-        if ($this->app['debug']) {
-            die('END');
-        }
     }
 
     private function stateMachine($record) {
         $rowType = $record[0];
         switch ($this->state) {
             case self::STATE_INIT:
-                $this->checkStateInit($rowType);
+                $this->checkStateInit($rowType, $record);
                 break;
 
             case self::ROW_TYPE_Y_PROT_DATA:
-                $this->checkStateRowTypeProtDataY($rowType);
+                $this->checkStateRowTypeProtDataY($rowType, $record);
                 break;
 
             case self::ROW_TYPE_A_PORAD_TV:
-                $this->checkStateRowTypePoradTvA($rowType);
+                $this->checkStateRowTypePoradTvA($rowType, $record);
                 break;
 
             case self::ROW_TYPE_B_SNIMEK_TV:
             case self::ROW_TYPE_L_PODIL_TV:
-                $this->checkStateRowTypeSnimekTvBPodilTvL($rowType);
+                $this->checkStateRowTypeSnimekTvBPodilTvL($rowType, $record);
                 break;
 
             case self::ROW_TYPE_D_KSNIMEK_TV:
             case self::ROW_TYPE_E_KPODIL:
-                $this->checkStateRowTypeKsnimekTvDKpodilTvE($rowType);
+                $this->checkStateRowTypeKsnimekTvDKpodilTvE($rowType, $record);
                 break;
 
             case self::STATE_END:
                 break;
         }
+
+        $items = str_getcsv($record, self::DELIMITER_ITEM, self::ENCLOSURE_CHAR);
+        $this->app['intergram.validator']->validate($rowType, $items);
     }
 
     /**
